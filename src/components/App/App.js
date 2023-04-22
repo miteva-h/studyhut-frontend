@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Header from "../Header/header";
 import HomePage from "../Home/home";
+import Courses from "../Courses/CoursesList/courses";
 import StudyhutService from "../../repository/studyhutRepository";
 
 class App extends Component {
@@ -31,6 +32,8 @@ class App extends Component {
                                            path={path}
                                            element={<HomePage/>}/>)
                         })}
+                        <Route path="/courses"
+                               element={<Courses courses={this.state.allCourses}/>}/>
                     </Routes>
                 </main>
             </BrowserRouter>
