@@ -12,7 +12,7 @@ const Header = () => {
             <span>
                 <BsFillPersonFill size={60}></BsFillPersonFill>
                 <span className="fs-3 me-4">{username}</span>
-                <a className="active btn btn-info rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login"
+                <a className="active btn rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login" style={{background:"#97c3f0"}}
                    onClick={() => {
                        sessionStorage.clear();
                        localStorage.clear();
@@ -20,7 +20,7 @@ const Header = () => {
             </span>
         );
     } else {
-        authenticate = (<a className="active btn btn-info rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login">Login</a>);
+        authenticate = (<a className="active btn rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login" style={{background:"#97c3f0"}}>Login</a>);
     }
 
     return (
