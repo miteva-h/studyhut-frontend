@@ -1,10 +1,13 @@
-import './App.css';
 import React, {Component} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 import Header from "../Header/header";
 import HomePage from "../Home/home";
 import Courses from "../Courses/CoursesList/courses";
+import LoginPage from "../Auth/login";
+import RegisterPage from "../Auth/register";
 import StudyhutService from "../../repository/studyhutRepository";
 
 class App extends Component {
@@ -28,12 +31,20 @@ class App extends Component {
                 <main>
                     <Routes>
                         {["/", "/home"].map((path, index) => {
-                            return (<Route key={index}
-                                           path={path}
-                                           element={<HomePage/>}/>)
+                            return (
+                                <Route key={index}
+                                    path={path}
+                                    element={
+                                        localStorage.getItem("auth_token") ? <HomePage/> : <LoginPage/>
+                                    }/>
+                            )
                         })}
                         <Route path="/courses"
                                element={<Courses courses={this.state.allCourses}/>}/>
+                        <Route path="/login"
+                               element={<LoginPage/>}/>
+                        <Route path="/register"
+                               element={<RegisterPage/>}/>
                     </Routes>
                 </main>
             </BrowserRouter>
