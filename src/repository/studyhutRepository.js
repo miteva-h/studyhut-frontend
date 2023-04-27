@@ -49,17 +49,20 @@ const StudyhutService = {
     deletePost: (id) => {
         return http.delete(`/${id}`);
     },
-    searchPostsByKeyword:(keyword)=>{
-      return http.get(`/${keyword}`);
+    searchPostsByKeyword: (keyword) => {
+        return http.get(`/${keyword}`);
     },
-    addComplaint:(content, username)=>{
-        return http.post("/",{
-            "content":content,
-            "username":username
+    fetchComplaints: () => {
+        return http.get("/complaints");
+    },
+    addComplaint: (content, username) => {
+        return http.post("/complaints/createComplaint", {
+            "content": content,
+            "username": username
         });
     },
-    deleteComplaint:(id)=>{
-        return http.delete(`/${id}`);
+    deleteComplaint: (id) => {
+        return http.delete(`/complaints/${id}/delete`);
     }
 }
 export default StudyhutService;

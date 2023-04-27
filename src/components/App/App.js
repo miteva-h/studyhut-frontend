@@ -20,6 +20,7 @@ class App extends Component {
             postsForCourse: [],
             postsByKeyword: [],
             post: {},
+            complaints: [],
             complaint: {}
         }
     }
@@ -128,14 +129,25 @@ class App extends Component {
             });
     }
 
+    loadComplaints = () => {
+        StudyhutService.fetchComplaints()
+            .then((data) => {
+                this.setState({complaints: data.data})
+            });
+    }
+
     addComplaint = (content, username) => {
         StudyhutService.addComplaint(content, username)
-            .then();
+            .then(() => {
+                this.loadAllCourses();
+            });
     }
 
     deleteComplaint = (id) => {
         StudyhutService.deleteComplaint(id)
-            .then();
+            .then(() => {
+                this.loadComplaints();
+            });
     }
 
 
