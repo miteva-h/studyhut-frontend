@@ -34,10 +34,10 @@ class App extends Component {
                         {["/", "/home"].map((path, index) => {
                             return (
                                 <Route key={index}
-                                    path={path}
-                                    element={
-                                        localStorage.getItem("auth_token") ? <HomePage/> : <LoginPage/>
-                                    }/>
+                                       path={path}
+                                       element={
+                                           <HomePage/>
+                                       }/>
                             )
                         })}
                         <Route path="/courses"
