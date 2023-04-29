@@ -65,7 +65,7 @@ const StudyhutService = {
         return http.delete(`/complaints/${id}/delete`);
     },
     fetchReviews: (id) => {
-        return http.get(`/reviews/${id}`);
+        return http.get(`/posts/${id}/reviews`);
     },
     addReview: (reviewText, rating, username, post) => {
         return http.post("/reviews/create", {
