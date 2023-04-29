@@ -6,6 +6,7 @@ import './App.css';
 import Header from "../Header/header";
 import HomePage from "../Home/home";
 import Courses from "../Courses/CoursesList/courses";
+import Review from "../Reviews/reviews";
 import LoginPage from "../Auth/login";
 import RegisterPage from "../Auth/register";
 import StudyhutService from "../../repository/studyhutRepository";
@@ -21,7 +22,8 @@ class App extends Component {
             postsByKeyword: [],
             post: {},
             complaints: [],
-            complaint: {}
+            complaint: {},
+            reviews: []
         }
     }
 
@@ -42,6 +44,10 @@ class App extends Component {
                         })}
                         <Route path="/courses"
                                element={<Courses courses={this.state.allCourses}/>}/>
+                        <Route path="/reviews"
+                               element={<Review reviews={this.state.reviews}
+                                                onAddReview={this.addReview}
+                                                onDeleteReview={this.deleteReview}/>}/>
                         <Route path="/login"
                                element={<LoginPage/>}/>
                         <Route path="/register"
@@ -147,6 +153,27 @@ class App extends Component {
         StudyhutService.deleteComplaint(id)
             .then(() => {
                 this.loadComplaints();
+            });
+    }
+
+    loadReviews = (id) => {
+        StudyhutService.fetchReviews(id)
+            .then((data) => {
+                this.setState({reviews: data.data})
+            });
+    }
+
+    addReview = (reviewText, rating, username, post) => {
+        StudyhutService.addReview(reviewText, rating, username, post)
+            .then(() => {
+                this.loadReviews(post);
+            });
+    }
+
+    deleteReview = (id, post) => {
+        StudyhutService.deleteReview(id)
+            .then(() => {
+                this.loadReviews(post);
             });
     }
 
