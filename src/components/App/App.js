@@ -11,6 +11,7 @@ import LoginPage from "../Auth/Login";
 import RegisterPage from "../Auth/Register";
 import AddPost from "../Posts/PostAdd/addPost";
 import StudyhutService from "../../repository/studyhutRepository";
+import AddComplaint from "../Complaints/ComplaintAdd/addComplaint.js";
 
 class App extends Component {
     constructor(props) {
@@ -53,6 +54,8 @@ class App extends Component {
                                element={<LoginPage/>}/>
                         <Route path="/register"
                                element={<RegisterPage/>}/>
+                        <Route path="/complaint"
+                               element={<AddComplaint/>}/>
                     </Routes>
                 </main>
             </BrowserRouter>
