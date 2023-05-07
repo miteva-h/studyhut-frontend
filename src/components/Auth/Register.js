@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
 import logo from '../../studyHut.png';
+import { useNavigate } from "react-router-dom";
 
 // Creating schema
 const schema = Yup.object().shape({
@@ -10,19 +11,21 @@ const schema = Yup.object().shape({
     password: Yup.string()
       .required("Password is a required field")
       .min(8, "Password must be at least 8 characters"),
+    passwordConfirmation: Yup.string()
+     .oneOf([Yup.ref('password'), null], 'Passwords must match')
   });
 
-function loginPage(props){
+const RegisterPage = (props) => {
+    const navigate = useNavigate();
     return (
         <div className="container">
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ email: "", password: "", passwordConfirmation: "" }}
                 onSubmit={(values) => {
                     /** Handle submit */
-                    localStorage.setItem("auth_token", "1")
                     alert(JSON.stringify(values))
-                    window.location.replace("/")
+                    navigate("/login")
                 }}
             >
                 {({
@@ -33,7 +36,7 @@ function loginPage(props){
                 handleBlur,
                 handleSubmit,
                 }) => (
-                <div className="login justify-content-center row mx-0">
+                <div className="login row mx-0">
                     <img className="col-md-6 col-sm-12 col-xs-12" 
                         alt="logo"
                         src={logo}
@@ -45,7 +48,7 @@ function loginPage(props){
                     <div className="form col-md-6 col-sm-12 col-xs-12">
                     {/* Passing handleSubmit parameter to html form onSubmit property */}
                         <form noValidate onSubmit={handleSubmit} className="flex-center">
-                            <span>Login</span>
+                            <span>Register</span>
                         {/* Input html with passing formik parameters like handleChange, values, handleBlur to input properties */}
                             <input
                             type="email"
@@ -75,7 +78,20 @@ function loginPage(props){
                             <p className="error">
                             {errors.password && touched.password && errors.password}
                             </p>
-                            <button type="submit">Login</button>
+                            <input
+                            type="password"
+                            name="passwordConfirmation"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.passwordConfirmation}
+                            placeholder="Confirm password"
+                            className="form-control"
+                            />
+                            {/* If validation is not passed show errors */}
+                            <p className="error">
+                            {errors.passwordConfirmation && touched.passwordConfirmation && errors.passwordConfirmation}
+                            </p>
+                            <button type="submit">Register</button>
                         </form>
                     </div>
                 </div>
@@ -85,4 +101,4 @@ function loginPage(props){
     );
 }
 
-export default loginPage;
+export default RegisterPage;

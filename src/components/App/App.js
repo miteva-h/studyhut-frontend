@@ -7,8 +7,9 @@ import Header from "../Header/header";
 import HomePage from "../Home/home";
 import Courses from "../Courses/CoursesList/courses";
 import Review from "../Reviews/reviews";
-import LoginPage from "../Auth/login";
-import RegisterPage from "../Auth/register";
+import LoginPage from "../Auth/Login";
+import RegisterPage from "../Auth/Register";
+import AddPost from "../Posts/PostAdd/addPost";
 import StudyhutService from "../../repository/studyhutRepository";
 
 class App extends Component {
@@ -38,7 +39,7 @@ class App extends Component {
                                 <Route key={index}
                                        path={path}
                                        element={
-                                           <HomePage/>
+                                           <AddPost/>
                                        }/>
                             )
                         })}
