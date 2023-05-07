@@ -1,32 +1,32 @@
 import http from '../custom-axios/axios';
 
 const StudyhutService = {
-    fetchAllCourses: () => {
-        return http.get("/");
+    fetchCategories:()=>{
+      return http.get("/courses/categories")
     },
-    fetchCoursesByCategory: (category) => {
-        return http.get(`/${category}`);
+    fetchAllCourses: () => {
+        return http.get("/courses");
+    },
+    fetchCoursesByCategories: (categories)  => {
+        const params = new URLSearchParams();
+        categories.forEach(category => params.append('category', category));
+        return http.get("/courses/filter", { params: params });
     },
     addCourse: (name, picture, category) => {
-        return http.post("/", {
+        return http.post("/courses/create", {
             "name": name,
             "picture": picture,
             "category": category
         });
     },
-    addCategoryToCourse: (id, category) => {
-        return http.put(`/${id}`, {
-            "category": category
-        });
-    },
     editCourse: (id, name, picture) => {
-        return http.put(`/${id}`, {
+        return http.put(`/courses/${id}/edit`, {
             "name": name,
             "picture": picture
         })
     },
     deleteCourse: (id) => {
-        return http.delete(`/${id}`);
+        return http.delete(`/courses/${id}/delete`);
     },
     fetchAllPostsForCourse: (course) => {
         return http.get(`/${course}`);

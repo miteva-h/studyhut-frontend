@@ -12,11 +12,13 @@ import RegisterPage from "../Auth/Register";
 import AddPost from "../Posts/PostAdd/addPost";
 import StudyhutService from "../../repository/studyhutRepository";
 import AddComplaint from "../Complaints/ComplaintAdd/addComplaint.js";
+import data from "bootstrap/js/src/dom/data";
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            categories: [],
             allCourses: [],
             coursesByCategory: [],
             course: {},
@@ -45,7 +47,9 @@ class App extends Component {
                             )
                         })}
                         <Route path="/courses"
-                               element={<Courses courses={this.state.allCourses}/>}/>
+                               element={<Courses courses={this.state.allCourses}
+                                                 categories={this.state.categories}
+                                                 onGetCoursesByCategory={this.loadCoursesByCategories}/>}/>
                         <Route path="/reviews"
                                element={<Review reviews={this.state.reviews}
                                                 onAddReview={this.addReview}
@@ -62,6 +66,14 @@ class App extends Component {
         )
     }
 
+
+    loadCategories = () => {
+        StudyhutService.fetchCategories()
+            .then((data) => {
+                this.setState({categories: data.data})
+            });
+    }
+
     loadAllCourses = () => {
         StudyhutService.fetchAllCourses()
             .then((data) => {
@@ -69,22 +81,15 @@ class App extends Component {
             });
     }
 
-    loadCoursesByCategory = (category) => {
-        StudyhutService.fetchCoursesByCategory(category)
+    loadCoursesByCategories = (categories) => {
+        StudyhutService.fetchCoursesByCategories(categories)
             .then((data) => {
-                this.setState({coursesByCategory: data.data})
+                this.setState({allCourses: data.data})
             });
     }
 
     addCourse = (name, picture, category) => {
         StudyhutService.addCourse(name, picture, category)
-            .then(() => {
-                this.loadAllCourses();
-            });
-    }
-
-    addCategoryToCourse = (id, category) => {
-        StudyhutService.addCategoryToCourse(id, category)
             .then(() => {
                 this.loadAllCourses();
             });
@@ -179,6 +184,11 @@ class App extends Component {
             .then(() => {
                 this.loadReviews(post);
             });
+    }
+
+    componentDidMount() {
+        this.loadCategories();
+        this.loadAllCourses();
     }
 
 
