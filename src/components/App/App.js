@@ -42,7 +42,7 @@ class App extends Component {
                                 <Route key={index}
                                        path={path}
                                        element={
-                                           <AddPost/>
+                                           <HomePage/>
                                        }/>
                             )
                         })}
