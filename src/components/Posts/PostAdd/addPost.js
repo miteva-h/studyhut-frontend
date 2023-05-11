@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import stickyNotes from "../../../stickyNotes.png";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -88,7 +89,7 @@ const PostForm = (props) => {
                                                 id="keywords"
                                             />
                                             {/* No error handling because not a mandatory field */}
-                                            <Button className="btn-dark rounded-pill ms-auto mt-5" type="submit">Submit</Button>
+                                            <Button className="btn-dark rounded-pill ms-auto px-5 mt-5" type="submit">Submit</Button>
                                         </form>
                                     )}
                                 </Formik>
@@ -97,6 +98,8 @@ const PostForm = (props) => {
                         </Col>
                         <Col md={4} style={{ display: 'flex', alignItems: "center", flexDirection: "column" }}>
                             <Button className="text-dark w-50" style={{ backgroundColor: '#C9D9F0', borderRadius: '0.5rem' }}>Go Back</Button>
+                            <img src={stickyNotes} className="w-100" alt="sticky-notes" />
+                            <img src={stickyNotes} className="w-100" alt="sticky-notes" />
                         </Col>
                     </Row>
                 </Container>

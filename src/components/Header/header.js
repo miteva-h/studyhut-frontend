@@ -35,11 +35,11 @@ const Header = () => {
                                  width: '110px'
                              }}/>
                     </div>
-                    <a className="navbar-brand ms-2 fs-1 text-primary" href="/home">
+                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/home">
                         Home</a>
-                    <a className="navbar-brand ms-2 fs-1 text-primary" href="/courses">
+                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/courses">
                         Courses</a>
-                    <a className="navbar-brand ms-2 fs-1 text-primary" href="/complaint">
+                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/complaint">
                         Contact Us</a>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     </div>

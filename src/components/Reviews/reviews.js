@@ -64,7 +64,7 @@ const Review = (props) => {
                                 </span>
                             ))}
                         </div>
-                        <button id="submit" type="submit" className="btn btn-primary">Submit</button>
+                        <button id="submit" type="submit" className="submitBtn btn">Submit</button>
                     </fieldset>
                 </form>
             </div>

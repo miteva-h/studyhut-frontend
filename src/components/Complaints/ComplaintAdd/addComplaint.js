@@ -42,7 +42,7 @@ function addComplaint(){
                 {({ values, handleChange, handleSubmit, isSubmitting }) => (
                     <div>
                         <div className="col-md-6 col-sm-6 col-xs-12">
-                            <p className="text-primary">Contact Us</p>
+                            <p className="text-color">Contact Us</p>
                         </div>
                         <img className="col-md-6 col-sm-6 col-xs-12 float-md-end" 
                             alt="contact"
@@ -51,15 +51,16 @@ function addComplaint(){
                         />
                         <div className="contactForm col-md-6 col-sm-6 col-xs-12">
                             <form onSubmit={handleSubmit} noValidate>
-                                <span><p>Your message:</p></span>
-                                <input
+                                <label for="message"><span style={{color: '#1E6EB7'}}>Your message:</span></label>
+                                <textarea
                                     type="text"
                                     name="message"
                                     className="form-control inp_text"
                                     id="message"
                                     value={values.message}
                                     onChange={handleChange}
-                                />
+                                    rows={15}
+                                ></textarea>
                                 <div className="contactButton col-md-6 col-sm-6 col-xs-12">
                                     <button type="submit" disabled={isSubmitting}>
                                         Submit

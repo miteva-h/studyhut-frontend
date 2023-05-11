@@ -61,6 +61,14 @@
   text-align: center;
 }
 
+.text-color{
+  color: #1E6EB7;
+}
+
+.submitBtn{
+  background-color: #1E6EB7;
+}
+
 .form input {
   outline: 0;
   background: #f2f2f2;

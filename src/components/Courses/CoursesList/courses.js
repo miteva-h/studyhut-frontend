@@ -33,7 +33,7 @@ const Courses = (props) => {
                                 <div className="card p-0 m-3" style={{width: "18rem"}}>
                                     <img
                                         src={term.picture}
-                                        className="card-img-top" alt="course-photo"/>
+                                        className="card-img-top" alt="course"/>
                                     <div className="card-body" style={{background: "#c1cad4"}}>
                                         <div className="card-text float-start">{term.name}</div>
                                         <div className="float-end ms-2">
