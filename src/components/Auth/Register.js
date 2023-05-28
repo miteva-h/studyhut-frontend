@@ -2,6 +2,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import logo from '../../studyHut.png';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Creating schema
 const schema = Yup.object().shape({
@@ -11,7 +12,7 @@ const schema = Yup.object().shape({
     password: Yup.string()
       .required("Password is a required field")
       .min(8, "Password must be at least 8 characters"),
-    passwordConfirmation: Yup.string()
+    repeatPassword: Yup.string()
      .oneOf([Yup.ref('password'), null], 'Passwords must match')
   });
 
@@ -21,11 +22,23 @@ const RegisterPage = (props) => {
         <div className="container">
             <Formik
                 validationSchema={schema}
-                initialValues={{ email: "", password: "", passwordConfirmation: "" }}
+                initialValues={{ email: "", password: "", repeatPassword: "" }}
                 onSubmit={(values) => {
                     /** Handle submit */
-                    alert(JSON.stringify(values))
-                    navigate("/login")
+                    values.username = values.email;
+                    values.name = "User"
+                    values.role = "ROLE_USER";
+                    // navigate("/login")
+                    console.log(values);
+                    axios({
+                        method: "POST",
+                        url: "http://localhost:8080/register",
+                        data: values,
+                    }).then(response => {
+                        if(response.status === 200){
+                            navigate("/login");
+                        }
+                    })
                 }}
             >
                 {({
@@ -36,7 +49,7 @@ const RegisterPage = (props) => {
                 handleBlur,
                 handleSubmit,
                 }) => (
-                <div className="login row mx-0">
+                <div className="login row mx-0 justify-content-center">
                     <img className="col-md-6 col-sm-12 col-xs-12" 
                         alt="logo"
                         src={logo}
@@ -80,16 +93,16 @@ const RegisterPage = (props) => {
                             </p>
                             <input
                             type="password"
-                            name="passwordConfirmation"
+                            name="repeatPassword"
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            value={values.passwordConfirmation}
+                            value={values.repeatPassword}
                             placeholder="Confirm password"
                             className="form-control"
                             />
                             {/* If validation is not passed show errors */}
                             <p className="error">
-                            {errors.passwordConfirmation && touched.passwordConfirmation && errors.passwordConfirmation}
+                            {errors.repeatPassword && touched.repeatPassword && errors.repeatPassword}
                             </p>
                             <button type="submit">Register</button>
                         </form>

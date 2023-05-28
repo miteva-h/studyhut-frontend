@@ -154,3 +154,22 @@ font-size: 30px;
   font-size: 10px;
   color: red;
 }
+
+.customButton{
+  background-color: #fff;
+  border: 3px solid #0D6FB9
+}
+
+.clicked{
+  background-color: #81B0DB !important;
+  border: 3px solid #0D6FB9
+}
+
+@media screen and (max-width: 480px) {
+  .table {
+    margin-left: -100px;
+  }
+  .desktopImage{
+    display: none !important
+  }
+}

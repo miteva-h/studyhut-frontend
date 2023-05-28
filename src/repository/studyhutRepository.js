@@ -2,14 +2,14 @@ import http from '../custom-axios/axios';
 
 const StudyhutService = {
     fetchCategories:()=>{
-      return http.get("/courses/categories")
+      return http.get("/categories")
     },
     fetchAllCourses: () => {
         return http.get("/courses");
     },
     fetchCoursesByCategories: (categories)  => {
         const params = new URLSearchParams();
-        categories.forEach(category => params.append('category', category));
+        params.append('categories', categories);
         return http.get("/courses/filter", { params: params });
     },
     addCourse: (name, picture, category) => {
@@ -28,8 +28,8 @@ const StudyhutService = {
     deleteCourse: (id) => {
         return http.delete(`/courses/${id}/delete`);
     },
-    fetchAllPostsForCourse: (course) => {
-        return http.get(`/${course}`);
+    fetchAllPostsForCourse: (courseId) => {
+        return http.get(`/posts/searchByCourse?courseId=${courseId}`);
     },
     addPostForCourse: (title, keywords, notes, courseId, username) => {
         return http.post(`/${courseId}`, {
@@ -49,17 +49,18 @@ const StudyhutService = {
     deletePost: (id) => {
         return http.delete(`/${id}`);
     },
-    searchPostsByKeyword: (keyword) => {
-        return http.get(`/${keyword}`);
+    searchPostsByKeyword: (data) => {
+        const params = new URLSearchParams();
+        params.append('data', data);
+        return http.get('/posts/searchByKeywords', { params: data });
     },
     fetchComplaints: () => {
         return http.get("/complaints");
     },
-    addComplaint: (content, username) => {
-        return http.post("/complaints/createComplaint", {
-            "content": content,
-            "username": username
-        });
+    addComplaint: (data) => {
+        const params = new URLSearchParams();
+        params.append('data', data);
+        return http.post("/complaints/createComplaint", { params: data });
     },
     deleteComplaint: (id) => {
         return http.delete(`/complaints/${id}/delete`);
@@ -67,13 +68,10 @@ const StudyhutService = {
     fetchReviews: (id) => {
         return http.get(`/posts/${id}/reviews`);
     },
-    addReview: (reviewText, rating, username, post) => {
-        return http.post("/reviews/create", {
-            "reviewText": reviewText,
-            "rating": rating,
-            "username": username,
-            "post": post
-        });
+    addReview: (data) => {
+        const params = new URLSearchParams();
+        params.append('data', data);
+        return http.post("/reviews/create",  data);
     },
     deleteReview: (id) => {
         return http.delete(`/reviews/${id}/delete`);

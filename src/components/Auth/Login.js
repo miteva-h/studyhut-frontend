@@ -1,7 +1,9 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
 import logo from '../../studyHut.png';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 // Creating schema
 const schema = Yup.object().shape({
@@ -17,6 +19,13 @@ const schema = Yup.object().shape({
 const LoginPage = (props) => {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Update the document title using the browser API
+        if(Object.keys(props.user).length > 0){
+            navigate("/");
+        }
+    }, []);
+    
     return (
         <div className="container">
             <Formik
@@ -24,9 +33,18 @@ const LoginPage = (props) => {
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(values) => {
                     /** Handle submit */
-                    localStorage.setItem("auth_token", "1")
-                    alert(JSON.stringify(values))
-                    navigate("/");
+                    values.username = values.email;
+                    axios({
+                        method: "POST",
+                        url: "http://localhost:8080/login/post",
+                        data: values,
+                    }).then(response => {
+                        if(response.status === 200){
+                            props.updateUser(response.data);
+                            sessionStorage.setItem("JWT", "1")
+                            navigate('/');
+                        }
+                    });
                 }}
             >
                 {({
@@ -37,7 +55,7 @@ const LoginPage = (props) => {
                 handleBlur,
                 handleSubmit,
                 }) => (
-                <div className="login row mx-0">
+                <div className="login row mx-0 justify-content-center">
                     <img className="col-md-6 col-sm-12 col-xs-12" 
                         alt="logo"
                         src={logo}
@@ -80,7 +98,9 @@ const LoginPage = (props) => {
                             {errors.password && touched.password && errors.password}
                             </p>
                             <button type="submit">Login</button>
-                            <a href="/register">Dont have an account? Register</a>
+                            <Link to="/register">
+                                <span className="fs-5">Dont have an account? Register</span>
+                            </Link>
                         </form>
                     </div>
                 </div>

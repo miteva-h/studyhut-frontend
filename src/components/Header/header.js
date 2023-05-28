@@ -1,55 +1,81 @@
 import React from "react";
 import {BsFillPersonFill} from "react-icons/bs";
 import logo from '../../studyHut.png';
+import { Link, useNavigate } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const Header = () => {
 
-    let username = sessionStorage.getItem("username");
+const Header = (props) => {
+
+    const navigate = useNavigate();
 
     let authenticate;
-    if (sessionStorage.getItem("JWT")) {
+    if (Object.keys(props.user).length > 0) {
         authenticate = (
             <span>
                 <BsFillPersonFill size={60}></BsFillPersonFill>
-                <span className="fs-3 me-4">{username}</span>
-                <a className="active btn rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login" style={{background:"#97c3f0"}}
+                <span className="fs-3 me-4">{props.user.name}</span>
+                <span className="active btn rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" style={{background:"#97c3f0"}}
                    onClick={() => {
                        sessionStorage.clear();
                        localStorage.clear();
-                   }}>Logout</a>
+                       props.updateUser({});
+                       navigate('/login');
+                   }}>Logout</span>
             </span>
         );
     } else {
-        authenticate = (<a className="active btn rounded-5 ps-3 pe-3 text-center mb-1" aria-current="page" href="/login" style={{background:"#97c3f0"}}>Login</a>);
+        authenticate = (
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+                <span className="active btn rounded-5 ps-3 pe-3 text-center mb-1 text-dark" aria-current="page" style={{background:"#97c3f0"}}>Login</span>
+            </Link>
+        );
     }
 
     return (
-        <header>
-            <nav className="navbar navbar-expand-lg bg-white">
-                <div className="container-fluid">
-                    <div>
+        <Navbar bg="light" expand="lg">
+            <Container>
+                <Navbar.Brand>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
                         <img alt="logo"
-                             src={logo}
-                             style={{
-                                 height: '70px',
-                                 width: '110px'
-                             }}/>
-                    </div>
-                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/home">
-                        Home</a>
-                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/courses">
-                        Courses</a>
-                    <a className="navbar-brand ms-2 fs-1 text-color" style={{color: '#1E6EB7'}} href="/complaint">
-                        Contact Us</a>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    </div>
-                    <div className="d-flex justify-content-end">
-                        <div>{authenticate}</div>
-                    </div>
+                            src={logo}
+                            style={{
+                                height: '70px',
+                                width: '110px'
+                            }}/>
+                    </Link>
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Item>
+                        <Link to="/" style={{ textDecoration: 'none' }}>
+                        <span className="navbar-brand ms-2 fs-lg-1 text-color" style={{color: '#1E6EB7'}}>
+                            Home</span>
+                        </Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Link to="/courses" style={{ textDecoration: 'none' }}>
+                        <span className="navbar-brand ms-2 fs-lg-1 text-color" style={{color: '#1E6EB7'}}>
+                            Courses</span>
+                        </Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Link to="/complaint" style={{ textDecoration: 'none' }}>
+                        <span className="navbar-brand ms-2 fs-lg-1 text-color" style={{color: '#1E6EB7'}}>
+                            Contact Us</span>
+                        </Link>
+                    </Nav.Item>
+                </Nav>
+                <div>
+                    <div>{authenticate}</div>
                 </div>
-            </nav>
-            <hr className="m-0"/>
-        </header>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     );
 }
 

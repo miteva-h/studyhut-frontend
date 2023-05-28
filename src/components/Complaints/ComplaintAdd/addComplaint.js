@@ -5,17 +5,19 @@ import '../../App/App.css';
 import { Formik } from "formik";
 import axios from "axios";
 import {BsFillPersonFill} from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 
-function addComplaint(){
-    const username = sessionStorage.getItem('username');
+function AddComplaint(props){
+
+    const navigate = useNavigate();
 
     let authenticate;
-    if (sessionStorage.getItem("JWT")) {
+    if (Object.keys(props.user).length > 0) {
         authenticate = (
             <span>
                 <BsFillPersonFill size={60}></BsFillPersonFill>
-                <span className="fs-3 me-4">{username}</span>
+                <span className="fs-3 me-4">{props.user.name}</span>
             </span>
         );
     }
@@ -25,18 +27,9 @@ function addComplaint(){
             <Formik
                 initialValues={{ message: '' }}
                 onSubmit={(values, { setSubmitting }) => {
-                    axios.post('/complaints/createComplaint', { message: values.message })
-                        .then(response => {
-                            alert('Message saved successfully!');
-                            window.location.replace('/');
-                        })
-                        .catch(error => {
-                            alert('An error occurred while saving your message.');
-                            console.error(error);
-                        })
-                        .finally(() => {
-                            setSubmitting(false);
-                        });
+                    props.addComplaint(values.message, props.user)
+                    setSubmitting(false)
+                    navigate("/");
                 }}
             >
                 {({ values, handleChange, handleSubmit, isSubmitting }) => (
@@ -44,14 +37,14 @@ function addComplaint(){
                         <div className="col-md-6 col-sm-6 col-xs-12">
                             <p className="text-color">Contact Us</p>
                         </div>
-                        <img className="col-md-6 col-sm-6 col-xs-12 float-md-end" 
+                        <img className="col-md-6 col-sm-6 col-xs-12 float-md-end desktopImage" 
                             alt="contact"
                             src={contact}
                             style={{marginTop: "-90px"}}
                         />
                         <div className="contactForm col-md-6 col-sm-6 col-xs-12">
                             <form onSubmit={handleSubmit} noValidate>
-                                <label for="message"><span style={{color: '#1E6EB7'}}>Your message:</span></label>
+                                <label htmlFor="message"><span style={{color: '#1E6EB7'}}>Your message:</span></label>
                                 <textarea
                                     type="text"
                                     name="message"
@@ -75,4 +68,4 @@ function addComplaint(){
     );
 }
 
-export default addComplaint;
+export default AddComplaint;

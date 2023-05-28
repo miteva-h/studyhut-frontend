@@ -2,8 +2,9 @@ import React from "react";
 import logo from '../../hutNote.png';
 import notes from '../../notes.png';
 import {SocialIcon} from 'react-social-icons';
+import { Navigate } from "react-router-dom";
 
-const homePage = () => {
+const homePage = (props) => {
     return (
         <div className="container">
             <div className="row  mt-3">
@@ -23,22 +24,22 @@ const homePage = () => {
                 </div>
                 <div className="col-4 d-flex justify-content-center">
                     <img alt="logo"
-                         src={logo}
-                         style={{
-                             height: '160px',
-                             width: '200px'
-                         }}
+                            src={logo}
+                            style={{
+                                height: '160px',
+                                width: '200px'
+                            }}
                     />
                 </div>
             </div>
             <div className="row mt-3">
                 <div className="col-4 d-flex justify-content-center">
                     <img alt="logo"
-                         src={notes}
-                         style={{
-                             height: '190px',
-                             width: '240px'
-                         }}
+                            src={notes}
+                            style={{
+                                height: '190px',
+                                width: '240px'
+                            }}
                     />
                 </div>
                 <div className="col-8">

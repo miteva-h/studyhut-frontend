@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 import {BsFillEmojiSmileFill, BsFillEmojiNeutralFill, BsFillEmojiFrownFill, BsFillFilePersonFill} from "react-icons/bs";
 
 const Review = (props) => {
 
-    let username = sessionStorage.getItem("username");
-    let role = sessionStorage.getItem("role");
+    let username = props.user.name;
+    let role = props.user.role;
 
     let rating = [1, 3, 5]
 
     const navigate = useNavigate();
+    const [dateTime, setDateTime] = useState("");
     const [formData, updateFormData] = React.useState({
         reviewText: "",
         rating: 1
@@ -17,22 +18,41 @@ const Review = (props) => {
     const handleChange = (e) => {
         updateFormData({
             ...formData,
-            [e.target.name]: e.target.value.trim()
+            [e.target.name]: e.target.value.trim(),
         })
     }
     const onFormSubmit = (e) => {
         e.preventDefault();
         const reviewText = formData.reviewText;
         const rating = formData.rating;
-
-        props.onAddReview(reviewText, rating, username, props.post.id);
-        navigate(`/reviews/${props.post.id}`);
+        let data = {
+            dateTimeCreated: dateTime,
+            reviewText: reviewText,
+            rating: rating,
+            userId: props.user.userID,
+            postId: props.post.postID,
+        }
+        props.onAddReview(data);
+        // navigate(`/reviews/${props.post.id}`);
     }
 
+    useEffect(() => {
+        props.loadReviews(props.post.postID);
+        var date = new Date();
+        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+        var day  = ("0" + (date.getDate())).slice(-2);
+        var year = date.getFullYear();
+        var hour =  ("0" + (date.getHours())).slice(-2);
+        var min =  ("0" + (date.getMinutes())).slice(-2);
+        var seg = ("0" + (date.getSeconds())).slice(-2);
+        date = year + "-" + month + "-" + day + "-" + hour + "-" +  min + "-" + seg + ".000";
+        setDateTime(date);
+    }, [])
+
     let review;
-    if (role != null && role === "USER") {
+    if (role != null && role === "ROLE_USER") {
         review = (
-            <div>
+            <div className="mt-4">
                 <form onSubmit={onFormSubmit}>
                     <fieldset className="rounded p-3"
                               style={{border: "2px solid grey", backgroundColor: "#cbebf5"}}>
@@ -53,7 +73,7 @@ const Review = (props) => {
                                 <span key={index} className="pe-5 pb-2">
                                     <input
                                         type="radio"
-                                        name="stars"
+                                        name="rating"
                                         value={term}
                                         onChange={handleChange}
                                     />
@@ -75,20 +95,10 @@ const Review = (props) => {
 
     return (
         <div>
-            <div className={"container"} style={{
+            <div className={"container flex-xs-column"} style={{
                 height: "100vh", display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <div className="float-start w-50 h-auto pe-3" style={{
-                    display: 'flex',
-                    alignItems: 'end',
-                    justifyContent: 'end'
-                }}>
-                    <p>{props.post.user.username} </p>
-                    <p>{props.post.title} </p>
-
-                </div>
                 <div className="float-start w-50 h-auto">
                     {review}
 
@@ -102,10 +112,9 @@ const Review = (props) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {props.reviews.map((term) => {
-                                console.log(term);
+                        {props.reviews.map((term, key) => {
                                 return (
-                                    <tr style={{borderBottom: "1px solid grey"}}>
+                                    <tr style={{borderBottom: "1px solid grey"}} key={key}>
                                         <td><BsFillFilePersonFill></BsFillFilePersonFill>{term.user.username}</td>
                                         <td>{term.reviewText}</td>
                                         <td>

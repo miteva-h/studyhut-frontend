@@ -6,6 +6,7 @@ import './App.css';
 import Header from "../Header/header";
 import HomePage from "../Home/home";
 import Courses from "../Courses/CoursesList/courses";
+import Posts from "../Posts/PostList/posts";
 import Review from "../Reviews/reviews";
 import LoginPage from "../Auth/Login";
 import RegisterPage from "../Auth/Register";
@@ -13,6 +14,8 @@ import AddPost from "../Posts/PostAdd/addPost";
 import StudyhutService from "../../repository/studyhutRepository";
 import AddComplaint from "../Complaints/ComplaintAdd/addComplaint.js";
 import data from "bootstrap/js/src/dom/data";
+import Protected from "../Auth/Protected";
+import CourseForm from "../Courses/CourseAdd/addCourse";
 
 class App extends Component {
     constructor(props) {
@@ -22,6 +25,8 @@ class App extends Component {
             allCourses: [],
             coursesByCategory: [],
             course: {},
+            user: {},
+            isSignedIn: false,
             postsForCourse: [],
             postsByKeyword: [],
             post: {},
@@ -31,10 +36,31 @@ class App extends Component {
         }
     }
 
+    updateCourse = (newCourse) => {
+        this.setState({ course: newCourse});
+        this.loadAllPostsForCourse(newCourse.id);
+    }
+
+    updatePost = (newPost) => {
+        this.setState({ post: newPost});
+    }
+
+    updateUser = (newUser) => {
+        this.setState({ user: newUser });
+        if(Object.keys(newUser).length > 0){
+            this.setState({isSignedIn: true});
+        }
+        else{
+            this.setState({isSignedIn: false});
+        }
+    }
+
     render() {
         return (
             <BrowserRouter>
-                <Header/>
+                <Header user={this.state.user}
+                        updateUser={this.updateUser}
+                />
                 <main>
                     <Routes>
                         {["/", "/home"].map((path, index) => {
@@ -42,24 +68,87 @@ class App extends Component {
                                 <Route key={index}
                                        path={path}
                                        element={
-                                           <HomePage/>
+                                        <Protected isSignedIn={this.state.isSignedIn}>
+                                            <HomePage user={this.state.user}/>
+                                        </Protected>
                                        }/>
                             )
                         })}
                         <Route path="/courses"
-                               element={<Courses courses={this.state.allCourses}
-                                                 categories={this.state.categories}
-                                                 onGetCoursesByCategory={this.loadCoursesByCategories}/>}/>
+                               element={
+                                    <Protected isSignedIn={this.state.isSignedIn}>
+                                        <Courses courses={this.state.allCourses}
+                                                    categories={this.state.categories}
+                                                    updateCourse={this.updateCourse}
+                                                    user={this.state.user}
+                                                    deleteCourse={this.deleteCourse}
+                                                    onGetCoursesByCategory={this.loadCoursesByCategories}/>
+                                    </Protected>
+                                }/>
+                        <Route path="/courses/add-edit"
+                               element={
+                                    <Protected isSignedIn={this.state.isSignedIn}>
+                                        <CourseForm course={this.state.course}
+                                                    categories={this.state.categories}
+                                                    user={this.state.user}
+                                                    loadCategories={this.loadAllCourses}
+                                                    />
+                                    </Protected>
+                                }/>
                         <Route path="/reviews"
-                               element={<Review reviews={this.state.reviews}
-                                                onAddReview={this.addReview}
-                                                onDeleteReview={this.deleteReview}/>}/>
+                               element={
+                                    <Protected isSignedIn={this.state.isSignedIn}>
+                                        <Review reviews={this.state.reviews}
+                                                    user={this.state.user}
+                                                    post={this.state.post}
+                                                    loadReviews={this.loadReviews}
+                                                    onAddReview={this.addReview}
+                                                    onDeleteReview={this.deleteReview}/>
+                                    </Protected>
+                                }/>
                         <Route path="/login"
-                               element={<LoginPage/>}/>
+                               element={<LoginPage user={this.state.user} 
+                                                updateUser={this.updateUser}   
+                               />}/>
                         <Route path="/register"
-                               element={<RegisterPage/>}/>
+                               element={<RegisterPage user={this.state.user}
+                               />}/>
                         <Route path="/complaint"
-                               element={<AddComplaint/>}/>
+                               element={
+                                <Protected isSignedIn={this.state.isSignedIn}>
+                                    <AddComplaint user={this.state.user}
+                                                addComplaint={this.addComplaint}
+                                    />
+                                </Protected>
+                               }/>
+                        <Route path="/posts"
+                                element={
+                                    <Protected isSignedIn={this.state.isSignedIn}>
+                                        <Posts
+                                            course={this.state.course}
+                                            posts={this.state.postsForCourse}
+                                            user={this.state.user}
+                                            categories={this.state.categories}
+                                            loadPosts={this.loadAllPostsForCourse}
+                                            updatePost={this.updatePost}
+                                            searchPostsByKeywords={this.searchPostsByKeyword}
+                                            loadAllPostsForCourse={this.loadAllPostsForCourse}
+                                        />
+                                    </Protected>
+                                }
+                        />
+                        <Route path="/posts/add-edit"
+                                element={
+                                    <Protected isSignedIn={this.state.isSignedIn}>
+                                        <AddPost 
+                                            course={this.state.course}
+                                            post={this.state.post}
+                                            user={this.state.user}
+                                            updatePost={this.updatePost}
+                                        />
+                                    </Protected>
+                                }
+                        />
                     </Routes>
                 </main>
             </BrowserRouter>
@@ -109,8 +198,8 @@ class App extends Component {
             });
     }
 
-    loadAllPostsForCourse = (course) => {
-        StudyhutService.fetchAllPostsForCourse(course)
+    loadAllPostsForCourse = (courseId) => {
+        StudyhutService.fetchAllPostsForCourse(courseId)
             .then((data) => {
                 this.setState({postsForCourse: data.data})
             });
@@ -137,10 +226,10 @@ class App extends Component {
             });
     }
 
-    searchPostsByKeyword = (keyword) => {
-        StudyhutService.searchPostsByKeyword(keyword)
+    searchPostsByKeyword = (data) => {
+        StudyhutService.searchPostsByKeyword(data)
             .then((data) => {
-                this.setState({postsByKeyword: data.data})
+                this.setState({postsForCourse: data.data})
             });
     }
 
@@ -152,7 +241,11 @@ class App extends Component {
     }
 
     addComplaint = (content, username) => {
-        StudyhutService.addComplaint(content, username)
+        let data = {
+            content: content,
+            username: username
+        }
+        StudyhutService.addComplaint(data)
             .then(() => {
                 this.loadAllCourses();
             });
@@ -172,10 +265,10 @@ class App extends Component {
             });
     }
 
-    addReview = (reviewText, rating, username, post) => {
-        StudyhutService.addReview(reviewText, rating, username, post)
+    addReview = (data) => {
+        StudyhutService.addReview(data)
             .then(() => {
-                this.loadReviews(post);
+                this.loadReviews(data.postId);
             });
     }
 
