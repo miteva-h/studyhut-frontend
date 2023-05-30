@@ -62,7 +62,7 @@ const Courses = (props) => {
                             <div key={key} className="card p-0 m-3" style={{width: "18rem"}}>
                                 <img
                                     onClick={() => {props.updateCourse(term); navigate('/posts')}}
-                                    src={term.picture}
+                                    src={"https://www.finki.ukim.mk/Content/dataImages/downloads/logo-large-500x500_2.png"}
                                     className="card-img-top" alt="course"/>
                                 <div className="card-body" onClick={() => {props.updateCourse(term); navigate('/posts')}} style={{background: "#c1cad4"}}>
                                     <div className="card-text float-start">{term.name}</div>

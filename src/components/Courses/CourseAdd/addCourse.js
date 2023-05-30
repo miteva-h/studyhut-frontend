@@ -60,7 +60,7 @@ const CourseForm = (props) => {
                     <Container style={{ paddingTop: "5%" }}>
                         <Row>
                             <Col md={8} className="align-items-center">
-                                <h1>Add Course</h1>
+                                <h1>Form for Course</h1>
                                 <Card className="rounded rounded-square" style={{ width: '100%', height: 'fit-content', backgroundColor: '#C9D9F0', border: 'solid black 1px'}}>
                                     <Card.Body>
                                     <Formik
@@ -112,7 +112,7 @@ const CourseForm = (props) => {
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
                                                     value={values.name}
-                                                    placeholder="Enter note name"
+                                                    placeholder="Enter course name"
                                                     className="form-control inp_text"
                                                     id="name"
                                                 />

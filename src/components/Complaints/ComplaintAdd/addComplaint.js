@@ -1,14 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import {SocialIcon} from 'react-social-icons';
 import contact from "./contactUs.png"; // Import the image file
 import '../../App/App.css';
-import { Formik } from "formik";
+import {Formik} from "formik";
 import axios from "axios";
 import {BsFillPersonFill} from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
-function AddComplaint(props){
+function AddComplaint(props) {
 
     const navigate = useNavigate();
 
@@ -22,25 +22,57 @@ function AddComplaint(props){
         );
     }
 
-    return (
-        <div className="container contactUs" >
+    const [isVisible, setIsVisible] = useState(true);
+
+    const disappear = () => {
+        setIsVisible(false);
+    };
+
+
+    let show;
+    if (props.user.role === "ROLE_ADMIN") {
+        show = (
+            <div>
+                <table className="table-striped table">
+                    <tr>
+                        <th>Number</th>
+                        <th>Complaint</th>
+                        <th></th>
+                    </tr>
+                    {isVisible && (
+                        <tr id="trow">
+                            <td>1</td>
+                            <td>Please add course for Object-oriented programming.</td>
+                            <td>
+                                <button className="btn btn-danger" onClick={disappear}>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    )}
+                </table>
+
+            </div>
+        );
+    } else {
+        show = (<div className="container contactUs">
             <Formik
-                initialValues={{ message: '' }}
-                onSubmit={(values, { setSubmitting }) => {
+                initialValues={{message: ''}}
+                onSubmit={(values, {setSubmitting}) => {
                     props.addComplaint(values.message, props.user)
                     setSubmitting(false)
                     navigate("/");
                 }}
             >
-                {({ values, handleChange, handleSubmit, isSubmitting }) => (
+                {({values, handleChange, handleSubmit, isSubmitting}) => (
                     <div>
                         <div className="col-md-6 col-sm-6 col-xs-12">
                             <p className="text-color">Contact Us</p>
                         </div>
-                        <img className="col-md-6 col-sm-6 col-xs-12 float-md-end desktopImage" 
-                            alt="contact"
-                            src={contact}
-                            style={{marginTop: "-90px"}}
+                        <img className="col-md-6 col-sm-6 col-xs-12 float-md-end desktopImage"
+                             alt="contact"
+                             src={contact}
+                             style={{marginTop: "-90px"}}
                         />
                         <div className="contactForm col-md-6 col-sm-6 col-xs-12">
                             <form onSubmit={handleSubmit} noValidate>
@@ -57,14 +89,18 @@ function AddComplaint(props){
                                 <div className="contactButton col-md-6 col-sm-6 col-xs-12">
                                     <button type="submit" disabled={isSubmitting}>
                                         Submit
-                                    </button> 
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 )}
             </Formik>
-        </div>
+        </div>)
+    }
+
+    return (
+        {show}
     );
 }
 

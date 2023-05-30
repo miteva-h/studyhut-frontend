@@ -64,16 +64,17 @@ const Posts = (props) => {
             </div>
             <div className="row float-start mt-5" style={{width: "100%"}}>
                 {posts.map((term, key) => {
+                    const concatenatedValue = "Predavanje_" + (key+1) +".pdf";
                         return (
                             <div key={key} className='row mb-4'>
                                 <div className='col-md-11'>
                                     <div className="card p-0 w-100">
                                         <div className="card-body">
                                             <div className="card-text float-start">
-                                                <span>{term.name}</span>
+                                                <span><a>{term.name}</a></span>
                                             </div>
                                             <div className="ms-2">
-                                                <span>{term.notes}</span>
+                                                <span>{concatenatedValue}</span>
                                             </div>
                                         </div>
                                         <div className='card-footer' style={{background: "#c1cad4"}}>
