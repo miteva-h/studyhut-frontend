@@ -23,7 +23,7 @@ class App extends Component {
         this.state = {
             categories: [],
             allCourses: [],
-            coursesByCategory: [],
+            allCoursesHelper: [],
             course: {},
             user: {},
             isSignedIn: false,
@@ -43,6 +43,16 @@ class App extends Component {
 
     updatePost = (newPost) => {
         this.setState({ post: newPost});
+    }
+
+    updateCourses = (newCourses) => {
+        console.log(newCourses);
+        if(newCourses.length > 0){
+            this.setState({ allCourses: newCourses});
+        }
+        else{
+            this.loadAllCourses();
+        }
     }
 
     updateUser = (newUser) => {
@@ -78,11 +88,14 @@ class App extends Component {
                                element={
                                     <Protected isSignedIn={this.state.isSignedIn}>
                                         <Courses courses={this.state.allCourses}
+                                                    coursesHelper={this.state.allCoursesHelper}
                                                     categories={this.state.categories}
                                                     updateCourse={this.updateCourse}
                                                     user={this.state.user}
                                                     deleteCourse={this.deleteCourse}
-                                                    onGetCoursesByCategory={this.loadCoursesByCategories}/>
+                                                    onGetCoursesByCategory={this.loadCoursesByCategories}
+                                                    doNewCourse={this.newCourse}
+                                                    updateCourses={this.updateCourses}/>
                                     </Protected>
                                 }/>
                         <Route path="/courses/add-edit"
@@ -92,6 +105,7 @@ class App extends Component {
                                                     categories={this.state.categories}
                                                     user={this.state.user}
                                                     loadCategories={this.loadAllCourses}
+                                                    newCourse={this.state.newCourse}
                                                     />
                                     </Protected>
                                 }/>
@@ -133,10 +147,10 @@ class App extends Component {
                                             updatePost={this.updatePost}
                                             searchPostsByKeywords={this.searchPostsByKeyword}
                                             loadAllPostsForCourse={this.loadAllPostsForCourse}
-                                        />
+                                            />
                                     </Protected>
                                 }
-                        />
+                                />
                         <Route path="/posts/add-edit"
                                 element={
                                     <Protected isSignedIn={this.state.isSignedIn}>
@@ -167,6 +181,7 @@ class App extends Component {
         StudyhutService.fetchAllCourses()
             .then((data) => {
                 this.setState({allCourses: data.data})
+                this.setState({allCoursesHelper: data.data})
             });
     }
 

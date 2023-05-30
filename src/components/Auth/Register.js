@@ -28,8 +28,7 @@ const RegisterPage = (props) => {
                     values.username = values.email;
                     values.name = "User"
                     values.role = "ROLE_USER";
-                    // navigate("/login")
-                    console.log(values);
+                    navigate("/login");
                     axios({
                         method: "POST",
                         url: "http://localhost:8080/register",

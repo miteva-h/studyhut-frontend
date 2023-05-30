@@ -32,7 +32,6 @@ const CourseForm = (props) => {
             var tempOptions = [];
             props.course.categories.forEach(category => {
                 var defaultOption = {value: category.categoryID, label: category.name};
-                console.log(defaultOption);
                 tempOptions.push(defaultOption);
             });
             return tempOptions;
@@ -81,8 +80,8 @@ const CourseForm = (props) => {
                                                 categoryIds: values.categories,
                                                 picture: "Image",
                                             }
-                                            var url = (props.course !== {}) ? "http://localhost:8080/courses/" + props.course.courseID + "/edit" : "http://localhost:8080/courses/create";
-                                            var method = (props.course !== {}) ? "PUT" : "POST";
+                                            var url = (props.course.courseID != null) ? "http://localhost:8080/courses/" + props.course.courseID + "/edit" : "http://localhost:8080/courses/create";
+                                            var method = (props.course.courseID != null) ? "PUT" : "POST";
                                             axios({
                                                 method: method,
                                                 url: url,

@@ -13,7 +13,7 @@ const Courses = (props) => {
     const handleCategoryChange = (event) => {
         let categoryId = event.target.value;
         let selected = selectedCategories.slice();
-        
+
         const index = selected.indexOf(categoryId);
         if (index > -1) {
             selected.splice(index, 1);
@@ -24,7 +24,17 @@ const Courses = (props) => {
             event.target.classList.add("clicked");
         }
         setSelectedCategories(selected);
-        props.onGetCoursesByCategory(selected);
+        var filteredCourses = [];
+        props.coursesHelper.forEach(course => {
+            // let temp = null; 
+            course.categories.forEach(category => {
+                if(selected.includes(category.categoryID + "")){
+                    // temp = course;
+                    filteredCourses.push(course);
+                }
+            })
+        })
+        props.updateCourses(filteredCourses);
     };
 
 
